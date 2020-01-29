@@ -1,58 +1,82 @@
-const boardSize = 4;
-const board = [
-  1, 2, 3, 4, 
-  5, 6, 7, 8, 
-  9, 10, 11, 12, 
-  13, 14, 15, 16];
+const boardSize = 50;
+// let board = [
+//   1, 0, 0, 1, 1, 0, 0, 1, 0, 1,
+//   1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 
+//   1, 1, 1, 1, 1, 0, 0, 1, 0, 1,
+//   1, 0, 0, 1, 1, 0, 0, 1, 0, 1,
+//   1, 0, 0, 1, 1, 0, 0, 1, 0, 1,
+//   1, 0, 0, 1, 1, 0, 0, 1, 0, 1,
+//   1, 0, 0, 1, 1, 0, 0, 1, 0, 1,
+//   1, 0, 0, 1, 1, 0, 0, 1, 0, 1,
+//   1, 0, 0, 1, 1, 0, 0, 1, 0, 1,
+//   1, 0, 0, 1, 1, 0, 0, 1, 0, 1,
+// ];
 
-function tick() {
-  updateState();
+let board = [...new Array(2500)].map(() => Math.round(Math.random() * 1));
+
+const positions = ["NW", "N", "NE", "E", "SE", "S", "SW", "W"];
+
+function getBoard() {
+  return updateState();
 }
+
+// export function foo(testBoard) {
+//   board = testBoard;
+//   return updateState();
+// }
 
 function updateState() {
-  let numberOfRows = board.length / boardSize;
-  let numberOfCols = numberOfRows;
-
+  let newBoard = [];
   board.forEach((cell, idx) => {
-    console.log(cell, getNeighbour(idx, "SW"))
+    let liveNeighbours = 0;
+    positions.forEach(pos => liveNeighbours += getNeighbourState(idx, pos));
+
+    if (cell === 1 && (liveNeighbours === 2 || liveNeighbours === 3)) {
+      newBoard[idx] = 1;
+    } else if (cell === 0 && liveNeighbours === 3) {
+      newBoard[idx] = 1;
+    } else {
+      newBoard[idx] = 0;
+    }
   });
+  board = newBoard;
+  return board;
 }
 
-function getNeighbour(index, position) {
+function getNeighbourState(index, position) {
   let col = index % boardSize;
   let row = Math.floor(index / boardSize);
+  let state = 0;
 
   switch (position) {
     case "NW":
-      return row > 0 && col > 0 ? board[((row - 1) * boardSize) + (col - 1)] : -1;
+      state = row > 0 && col > 0 ? board[((row - 1) * boardSize) + (col - 1)] : 0;
+      break;
     case "N":
-      return row > 0 ? board[((row - 1) * boardSize) + col] : -1;
+      state = row > 0 ? board[((row - 1) * boardSize) + col] : 0;
+      break;
     case "NE":
-      return row > 0 && col < boardSize ? board[((row - 1) * boardSize) + (col + 1)] : -1;
+      state = row > 0 && col < boardSize ? board[((row - 1) * boardSize) + (col + 1)] : 0;
+      break;
     case "E":
-      return col < boardSize - 1 ? board[(row * boardSize) + (col + 1)] : -1;
+      state = col < boardSize - 1 ? board[(row * boardSize) + (col + 1)] : 0;
+      break;
     case "SE":
-      return col < boardSize - 1 && row < boardSize - 1 ? board[((row + 1) * boardSize) + (col + 1)] : -1;
+      state = col < boardSize - 1 && row < boardSize - 1 ? board[((row + 1) * boardSize) + (col + 1)] : 0;
+      break;
     case "S":
-      return row < boardSize - 1 ? board[((row + 1) * boardSize) + col] : -1;
+      state = row < boardSize - 1 ? board[((row + 1) * boardSize) + col] : 0;
+      break;
     case "SW":
-      return col > 0 && row < boardSize - 1 ? board[((row + 1) * boardSize) + (col - 1)] : -1;
+      state = col > 0 && row < boardSize - 1 ? board[((row + 1) * boardSize) + (col - 1)] : 0;
+      break;
     case "W":
-      return col > 0 ? board[(row * boardSize) + (col - 1)] : -1;
+      state = col > 0 ? board[(row * boardSize) + (col - 1)] : 0;
+      break;
   }
+  return state;
 }
 
 updateState();
 
 
-/*
-
-
-0, 1, 2, 3 => 0
-4, 5, 6, 7 => 1
-8, 9, 10, 11 => 2
-
-
-
-
-*/

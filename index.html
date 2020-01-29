@@ -5,5 +5,34 @@
   </head>
   <body>
     <div id="container"></div>
+    <button id="tick">Advance</button>
   </body>
+  <style>
+    #container {
+      display: grid;
+      grid-template-columns: repeat(50, 20px);
+    }
+
+    .cell {
+      width: 20px;
+      height: 20px;
+      border: 1px solid black;
+    }
+
+    .alive {
+      background-color: black;
+    }
+  </style>
+  <script>
+    function tick() {
+      let html = "";
+      getBoard().forEach(cell => {
+        html += `<div class="cell ${cell === 1 ? 'alive' : ''}"></div>`;
+      });
+      document.getElementById("container").innerHTML = html;
+      // setTimeout(tick, 1000);
+    }
+    tick();
+    document.getElementById('tick').addEventListener('click', tick);
+  </script>
 </html>
