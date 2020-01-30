@@ -10,13 +10,13 @@
   <style>
     #container {
       display: grid;
-      grid-template-columns: repeat(50, 20px);
+      grid-template-columns: repeat(50, 10px);
     }
 
     .cell {
-      width: 20px;
-      height: 20px;
-      border: 1px solid black;
+      width: 10px;
+      height: 10px;
+      border: 1px solid rgb(131, 125, 125);
     }
 
     .alive {
@@ -30,7 +30,7 @@
         html += `<div class="cell ${cell === 1 ? 'alive' : ''}"></div>`;
       });
       document.getElementById("container").innerHTML = html;
-      // setTimeout(tick, 1000);
+      // setTimeout(tick, 500);
     }
     tick();
     document.getElementById('tick').addEventListener('click', tick);
